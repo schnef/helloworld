@@ -68,7 +68,7 @@ Start the release:
 	
 	~/helloworld$ ./_build/prod/rel/helloworld/bin/helloworld attach
 	(helloworld@tp)2> helloworld:helloworld().
-	"Hello, world!"
+	"Helo, world!"
 
 Clearly a typo!
 
