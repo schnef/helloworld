@@ -77,7 +77,7 @@ Clearly a typo!
 Changes:
  1. In `rebar.conf`:
     - Add release 0.2.0
-    - Add the `appup` plugin including `provider_hooks`. Do not add the `{pre, [{tar, {appup, tar}}]}` `provider_hook` as indicated in the original README, as it causes issues with `rebar3 tar`.
+    - Add the `appup` plugin including `provider_hooks`. Do not add the `{pre, [{tar, {appup, tar}}]}` `provider_hook` as indicated in the original [README](https://github.com/lrascao/rebar3_appup_plugin/blob/master/README.md), as it causes issues with `rebar3 tar`.
  2. Update the version number in `helloworld.app.src`.
  3. Correct the typo in `helloworld.erl`.
  4. Add `helloworld.appup.src` appup configuration:
