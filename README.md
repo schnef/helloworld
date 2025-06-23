@@ -4,6 +4,11 @@ Short description of the workflow for hot code reloading. The used OTP
 application can be downloaded from this
 [repo](https://github.com/schnef/helloworld).
 
+This is not about hot code upgrading in general but about using rebar3
+to do the upgrade. For much mmore background info see
+[this](https://erlangforums.com/t/mastering-hot-upgrades-daniel-szoboszlay-code-beam-lite-stockholm-2024/4266)
+talk.
+
 Tested with:
  - Erlang 27.3.4.1
  - Rebar3 3.25.0
