@@ -27,7 +27,7 @@ init([]) ->
     {ok, #state{}}.
 
 handle_call(helloworld, _From, State) ->
-    Reply = "Helo, world!",
+    Reply = "Hello, world!",
     {reply, Reply, State};
 handle_call(_Request, _From, State) ->
     Reply = ok,
