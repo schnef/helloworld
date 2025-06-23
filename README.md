@@ -81,9 +81,9 @@ Aanpassingen:
       zoals aangegeven in de originele README de `{pre, [{tar, {appup,
       tar}}]}` `provider_hook` toe omdat deze problemen geeft bij
       `rebar3 tar`
-    - Versienummer in `helloworld.app.src` aanpassen
-    - Typo corrigeren in `hellowworld.erl`
-    - Voeg `helloworld.appup.src` appup configuratie toe:
+ 2. Versienummer in `helloworld.app.src` aanpassen
+ 3. Typo corrigeren in `hellowworld.erl`
+ 4. Voeg `helloworld.appup.src` appup configuratie toe:
 
 		{"0.2.0",
 		[{"0.1.0", [{load_module, helloworld}]}],
