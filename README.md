@@ -1,20 +1,20 @@
-# Hot code reloading
+# Hot Code Reloading
 
-Korte beschrijving van de workflow bij hot code reloading. Gebruikte
-OTP applicatie kan worden gedownload van deze
-[repo](https://github.com/schnef/helloworld)
+Short description of the workflow for hot code reloading. The used OTP
+application can be downloaded from this
+[repo](https://github.com/schnef/helloworld).
 
-Getest met:
- - erlang 27.3.4.1
- - rebar3 3.25.0
+Tested with:
+ - Erlang 27.3.4.1
+ - Rebar3 3.25.0
  
-## Versie 0.1.0
+## Version 0.1.0
 
-Haal versie 0.1.0 op:
+Fetch version 0.1.0:
 
 	~/helloworld$ git checkout 0.1.0 
 
-Bestand rebar.conf bevat:
+The file `rebar.conf` contains:
 
 	{erl_opts, [debug_info]}.
 
@@ -43,23 +43,23 @@ Bestand rebar.conf bevat:
 	  }]
 	}.
  
-Maak een release en start deze:
+Create a release and start it:
 
 	~/helloworld$ rebar3 release
 
-Als je nu een gewone release maakt worden
-`_build/default/rel/helloworld/lib/` links gebruikt naar de gebruikte
-libraries waaronder `kernel`, `sasl` etc. Dit leidt tot problemen
-wanneer je een hot code update uitvoert omdat je deze libraries
-(goddank) niet mag updaten. De release moet worden gebouwd inclusief
-een kopie van de libraries.
+When you create a regular release, the
+`_build/default/rel/helloworld/lib/` directory uses symlinks to the
+libraries used, including `kernel`, `sasl`, etc. This leads to
+problems when performing a hot code update because you (thankfully)
+cannot update these libraries. The release must be built including a
+copy of the libraries.
 
-Maak een release inclusief de libararies volgens het profile `prod`
-(`{dev_mode, false}, {include_erts, true}`):
+Create a release including the libraries according to the `prod`
+profile (`{dev_mode, false}, {include_erts, true}`):
 
 	~/helloworld$ rebar3 as prod release
 
-Start release:
+Start the release:
 
 	~/helloworld$ ./_build/prod/rel/helloworld/bin/helloworld daemon
 	~/helloworld$ ./_build/prod/rel/helloworld/bin/helloworld versions
@@ -68,58 +68,56 @@ Start release:
 	
 	~/helloworld$ ./_build/prod/rel/helloworld/bin/helloworld attach
 	(helloworld@tp)2> helloworld:helloworld().
-	"Helo, world!"
+	"Hello, world!"
 
-Overduidelijk een typo!
+Clearly a typo!
 
-## Versie 0.2.0
+## Version 0.2.0
 
-Aanpassingen:
+Changes:
  1. In `rebar.conf`:
-    - release 0.2.0 toevoegen
-    - Voeg plugin `appup` toe inclusief `provider_hooks` Voeg niet
-      zoals aangegeven in de originele README de `{pre, [{tar, {appup,
-      tar}}]}` `provider_hook` toe omdat deze problemen geeft bij
-      `rebar3 tar`
- 2. Versienummer in `helloworld.app.src` aanpassen
- 3. Typo corrigeren in `hellowworld.erl`
- 4. Voeg `helloworld.appup.src` appup configuratie toe:
+    - Add release 0.2.0
+    - Add the `appup` plugin including `provider_hooks`. Do not add the `{pre, [{tar, {appup, tar}}]}` `provider_hook` as indicated in the original README, as it causes issues with `rebar3 tar`.
+ 2. Update the version number in `helloworld.app.src`.
+ 3. Correct the typo in `helloworld.erl`.
+ 4. Add `helloworld.appup.src` appup configuration:
 
 		{"0.2.0",
 		[{"0.1.0", [{load_module, helloworld}]}],
 		[{"0.1.0", [{load_module, helloworld}]}]
 		}.
-	`rebar3 appup generate` crasht, dus we moeten zelf een appup configuratie opgeven.
+	`rebar3 appup generate` crashes, so we need to specify our own appup configuration.
 	
-Haal versie 0.2.0 op:
+Fetch version 0.2.0:
 
 	~/helloworld$ git checkout 0.2.0 
 
-Maak een nieuwe (as prod) release aan:
+Create a new (as prod) release:
 
 	~/helloworld$ rebar3 as prod release
 	...
 	===> Compiling helloworld.appup.src to /home/erlang/helloworld/_build/prod/lib/helloworld/ebin/helloworld.appup
 	...
 
-Let op de regel `Compiling helloworld.appup.src` die aangeeft dat het
-appup configuratie bestand is meegenomen (dankzij de plugin appup?).
+Note the line `Compiling helloworld.appup.src`, which indicates that
+the appup configuration file has been included (thanks to the appup
+plugin?).
 
-Maak een relup aan en een tar file om de release te distribueren:
+Create a relup and a tar file to distribute the release:
 
 	~/helloworld$ rebar3 as prod relup -n helloworld -v "0.2.0" -u "0.1.0"
 	~/helloworld$ rebar3 as prod tar -v "0.2.0" -u "0.1.0"
 
-De oude release is nog steeds in productie:
+The old release is still in production:
 
 	~/helloworld$ ./_build/prod/rel/helloworld/bin/helloworld versions
 	Installed versions:
 	* 0.1.0	permanent
 
-Zet de tar file klaar zodat deze kan worden opgepikt tijdens de
-upgrade en voer de upgrade uit:
+Prepare the tar file so it can be picked up during the upgrade and
+perform the upgrade:
 
-	~/helloworld$ mv _build/prod//rel/helloworld/helloworld-0.2.0.tar.gz _build/prod/rel/helloworld/releases/0.2.0/
+	~/helloworld$ mv _build/prod/rel/helloworld/helloworld-0.2.0.tar.gz _build/prod/rel/helloworld/releases/0.2.0/
 
 	~/helloworld$ ./_build/prod/rel/helloworld/bin/helloworld upgrade 0.2.0
 	Release 0.2.0 not found, attempting to unpack releases/0.2.0/helloworld-0.2.0.tar.gz
@@ -137,14 +135,16 @@ upgrade en voer de upgrade uit:
 	"Hello, world!"
 	(helloworld@tp)2> 
 
-Typo fixed en klaar!
+Typo fixed and done!
 
-## Ondervonden problemen
- 1. Het was mij eerst niet duidelijk dat, om dit werkend te krijgen,
-    voor relx de opties `{dev_mode, false}` en `{include_erts, true}`
-    essentieel waren. Bij de update krijg je een foutmelding over een
-    unsafe path
- 2. De opdracht `rebar3 appup generate` crasht. Is dat van belang of
-    schrijf je in de praktijk toch steeds je eigen appup configuratie?
- 3. Als de pre `provider_hook` voor tar is gespecificeerd, dan crasht
-    `rebar3 tar …` ook. Voegt de appup tar provider_hook iets toe?
+## Encountered Issues
+ 1. It was initially unclear to me that, to get this working, the
+    options `{dev_mode, false}` and `{include_erts, true}` for relx
+    were essential. During the update, you receive an error message
+    about an unsafe path.
+ 2. The command `rebar3 appup generate` crashes. Is this significant,
+    or do you always end up writing your own appup configuration in
+    practice?
+ 3. If the pre `provider_hook` for tar is specified, then `rebar3 tar
+    ...` also crashes. Does the appup tar provider_hook add anything?
+ 
